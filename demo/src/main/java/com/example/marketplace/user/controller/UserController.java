@@ -5,6 +5,7 @@ import com.example.marketplace.user.dto.UserResponse;
 import com.example.marketplace.user.entity.User;
 import com.example.marketplace.user.mapper.UserMapper;
 import com.example.marketplace.user.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,7 +21,7 @@ public class UserController {
     // the flow Client -> Controller -> Service -> Entity
     // Entity -> mapped to UserResponse DTO -> Spring serializes it to JSON -> Controller returns response to client
     @PostMapping
-    public UserResponse createUser(@RequestBody RegisterRequest registerRequest) {
+    public UserResponse createUser(@Valid @RequestBody RegisterRequest registerRequest) {
         User user = userService.createUser(
                 registerRequest.getUsername(),
                 registerRequest.getPassword()
