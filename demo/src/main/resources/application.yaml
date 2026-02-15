@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: medical_marketplace
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/medical_marketplace
+    username: postgres
+    password: Broadridge@1
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: false
+
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+      - org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration
+
+server:
+  port: 8080
