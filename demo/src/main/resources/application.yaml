@@ -5,7 +5,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/medical_marketplace
     username: postgres
-    password: Broadridge@1
+    password: your_password
 
   jpa:
     hibernate:
