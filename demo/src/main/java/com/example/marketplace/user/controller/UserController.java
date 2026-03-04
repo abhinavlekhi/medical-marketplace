@@ -28,4 +28,9 @@ public class UserController {
         );
         return UserMapper.toResponse(user);
     }
+
+    @GetMapping("/test")
+    public String test() {
+        return "I am authenticated!!";
+    }
 }

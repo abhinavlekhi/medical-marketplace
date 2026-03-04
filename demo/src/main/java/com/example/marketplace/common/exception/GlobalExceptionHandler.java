@@ -11,7 +11,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@RestControllerAdvice
+@RestControllerAdvice // This annotation is a specialized version of @ControllerAdvice that combines @ControllerAdvice+@RestController, meaning
+// methods in this class will handle exceptions and responses will be in JSON format by default
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(DuplicateUsernameException.class)

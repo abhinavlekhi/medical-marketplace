@@ -24,5 +24,9 @@ spring:
       - org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
       - org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration
 
+jwt:
+  secret: your_super_secret_key
+  expiration: 3600000
+
 server:
   port: 8080

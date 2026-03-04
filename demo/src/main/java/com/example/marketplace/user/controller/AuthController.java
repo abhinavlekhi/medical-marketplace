@@ -1,6 +1,7 @@
 package com.example.marketplace.user.controller;
 
 import com.example.marketplace.common.exception.InvalidCredentialsException;
+import com.example.marketplace.common.security.JwtService;
 import com.example.marketplace.user.dto.LoginRequest;
 import com.example.marketplace.user.dto.LoginResponse;
 import com.example.marketplace.user.entity.User;
@@ -19,10 +20,12 @@ public class AuthController {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
-    public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     @PostMapping("/login")
@@ -36,6 +39,7 @@ public class AuthController {
         if( !matches ) {
             throw new InvalidCredentialsException("Invalid username or password");
         }
-        return ResponseEntity.ok(new LoginResponse("Login successful", user.getUserName()));
+        String token = jwtService.generateToken(user.getUserName());
+        return ResponseEntity.ok(new LoginResponse(token, user.getUserName()));
     }
 }
