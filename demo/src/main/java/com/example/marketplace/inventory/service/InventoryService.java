@@ -38,7 +38,8 @@ public class InventoryService {
                             newItem.setCreatedAt(Instant.now());
                             return itemRepository.save(newItem);
                         });
-        Optional<Batch> existingBatch=batchRepository.findByBatchNumber(createItemRequest.getBatchNumber());
+        Optional<Batch> existingBatch=batchRepository.
+                findByItemIdAndBatchNumber(item.getId(),createItemRequest.getBatchNumber());
 //        Batch existingBatch = batchRepository.findByBatchNumber(createItemRequest.getBatchNumber()).orElse(null);
         if (existingBatch.isPresent()) {
             Batch batch = existingBatch.get();

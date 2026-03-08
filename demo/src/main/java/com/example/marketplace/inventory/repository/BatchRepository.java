@@ -7,5 +7,5 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface BatchRepository extends JpaRepository<Batch, UUID> {
-    Optional<Batch> findByBatchNumber(String batchNumber);
+    Optional<Batch> findByItemIdAndBatchNumber(UUID itemId, String batchNumber);
 }
