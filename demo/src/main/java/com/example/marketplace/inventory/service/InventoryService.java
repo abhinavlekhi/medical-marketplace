@@ -2,13 +2,16 @@ package com.example.marketplace.inventory.service;
 
 import com.example.marketplace.common.exception.BadRequestException;
 import com.example.marketplace.inventory.dto.CreateItemRequest;
+import com.example.marketplace.inventory.dto.ItemResponse;
 import com.example.marketplace.inventory.entity.Batch;
 import com.example.marketplace.inventory.entity.Item;
 import com.example.marketplace.inventory.repository.BatchRepository;
 import com.example.marketplace.inventory.repository.ItemRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-
+import org.springframework.data.domain.Pageable;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
@@ -43,11 +46,9 @@ public class InventoryService {
 //        Batch existingBatch = batchRepository.findByBatchNumber(createItemRequest.getBatchNumber()).orElse(null);
         if (existingBatch.isPresent()) {
             Batch batch = existingBatch.get();
-
             if (!batch.getUnitPrice().equals(createItemRequest.getUnitPrice())) {
                 throw new BadRequestException("Unit price mismatch for existing batch");
             }
-
             batch.setQuantity(batch.getQuantity() + createItemRequest.getQuantity());
             return batchRepository.save(batch);
         }
@@ -63,5 +64,23 @@ public class InventoryService {
         batch.setCreatedAt(Instant.now());
 
         return batchRepository.save(batch);
+    }
+
+    public Page<ItemResponse> getItems(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Batch> batchPage = batchRepository.findAll(pageable);
+        return batchPage.map(batch -> {
+            Item item = itemRepository.findById(batch.getItemId()).orElseThrow(() ->
+                    new RuntimeException("Item Not Found"));
+            int available = batch.getQuantity()-batch.getReservedQuantity();
+            return new ItemResponse(
+                    item.getId(),
+                    item.getItemName(),
+                    item.getDefaultUnit(),
+                    batch.getUnitPrice(),
+                    available,
+                    batch.getExpiryDate()
+            );
+        });
     }
 }
